@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.2](https://github.com/grafana/loki/compare/v3.1.1...v3.1.2) (2024-09-18)
+
+
+### Bug Fixes
+
+* **loki/production/docker-compose:** upgrade loki and grafana production image tags to 3.1.1 ([#14025](https://github.com/grafana/loki/issues/14025)) ([36fe29e](https://github.com/grafana/loki/commit/36fe29eb334d8300265ca437c0acb423a01c5041))
+
 ## [3.1.1](https://github.com/grafana/loki/compare/v3.1.0...v3.1.1) (2024-08-08)
 
 
