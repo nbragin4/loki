@@ -132,6 +132,20 @@ func (t *PushTarget) handleLoki(w http.ResponseWriter, r *http.Request) {
 		for k, v := range t.config.Labels {
 			lb.Set(string(k), string(v))
 		}
+		
+		// Add HTTP headers starting with "X-LABEL-"
+		for headerKey, headerValues := range r.Header {
+			hk := headerKey
+			level.Debug(t.logger).Log("msg", "found header", "header", headerKey, "val", strings.Join(headerValues, ","))
+			if strings.HasPrefix(strings.ToLower(hk), "x-label-") {
+				// Format the header key by replacing "X-LABEL-" with "__meta_headers_"
+				labelKey := "__meta_headers_" + strings.TrimPrefix(strings.ToLower(hk), "x-label-")
+				for _, value := range r.Header.Values(hk) {
+					level.Debug(t.logger).Log("msg", "converted header", "header", labelKey, "val", value)
+					lb.Set(labelKey, value) // Set each value for the label key
+				}
+			}
+		}
 
 		// Apply relabeling
 		processed, keep := relabel.Process(lb.Labels(), t.relabelConfig...)
